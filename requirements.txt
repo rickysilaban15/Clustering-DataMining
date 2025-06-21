@@ -1,0 +1,9 @@
+streamlit
+scikit-learn
+pandas
+matplotlib
+seaborn
+plotly
+fpdf
+openpyxl
+protobuf==3.20.3
