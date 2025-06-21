@@ -175,7 +175,7 @@ st.title("🍷 WineCluster Pro - Analisis Clustering Wine")
 st.sidebar.title("🍇 WineCluster Sidebar")
 
 # 📤 Upload File
-uploaded_file = st.sidebar.file_uploader("Upload CSV File", type=["csv"])
+uploaded_file = st.sidebar.file_uploader("Upload CSV File", type=["csv"], key="upload_1") 
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
