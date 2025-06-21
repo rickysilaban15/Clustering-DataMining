@@ -33,7 +33,7 @@ st.title("🍷 WineCluster Pro - Analisis Clustering Wine")
 st.sidebar.title("🍇 WineCluster Sidebar")
 
 # 📤 Upload File
-uploaded_file = st.sidebar.file_uploader("Upload CSV File", type=["csv"], key="upload_1") 
+uploaded_file = st.sidebar.file_uploader("Upload CSV File", type=["csv"])
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
@@ -53,9 +53,8 @@ if uploaded_file:
     # ✨ Standardisasi
     X = StandardScaler().fit_transform(df[cols])
 
-    # ⚙️ Metode Clustering
+    # ⚙️ Pemilihan Metode Clustering
     method = st.sidebar.selectbox("Metode Clustering", ["KMeans", "DBSCAN", "Agglomerative", "GMM"])
-
     if method == "KMeans":
         k = st.sidebar.slider("Jumlah Klaster (K)", 2, 10, 3)
         model = KMeans(n_clusters=k, random_state=42)
@@ -81,37 +80,27 @@ if uploaded_file:
 
     df['Cluster'] = cluster_labels
 
-    # 📊 Visualisasi Scatter 2D
+    # 📊 Visualisasi, Statistik, Export, dll.
     st.subheader("📊 Visualisasi Klaster (2D)")
-    fig = px.scatter(
-        df,
-        x=cols[0],
-        y=cols[1],
-        color=df['Cluster'].astype(str),
-        symbol=df['Cluster'].astype(str),
-        title="Scatterplot Clustering"
-    )
+    fig = px.scatter(df, x=cols[0], y=cols[1], color=df["Cluster"].astype(str), symbol=df["Cluster"].astype(str), title="Scatterplot Clustering")
     st.plotly_chart(fig)
 
-    # 📌 Statistik per Cluster
     st.subheader("📌 Statistik per Cluster")
-    st.dataframe(df.groupby('Cluster')[cols].mean().round(2))
+    st.dataframe(df.groupby("Cluster")[cols].mean().round(2))
 
-    # 📈 Distribusi Pie Chart
     st.subheader("📈 Distribusi Jumlah Data Tiap Cluster")
-    fig2 = px.pie(df, names='Cluster', title="Distribusi Data per Cluster")
+    fig2 = px.pie(df, names="Cluster", title="Distribusi Data per Cluster")
     st.plotly_chart(fig2)
 
-    # 💾 Download ke CSV
-    csv_data = df.to_csv(index=False).encode('utf-8')
-    st.download_button("💾 Download Hasil Clustering (.CSV)", data=csv_data, file_name="hasil_clustering.csv", mime='text/csv')
+    # 💾 Export Data
+    csv_data = df.to_csv(index=False).encode("utf-8")
+    st.download_button("💾 Download Hasil Clustering (.CSV)", data=csv_data, file_name="hasil_clustering.csv", mime="text/csv")
 
-    # 📥 Download ke Excel
     excel_buffer = io.BytesIO()
     df.to_excel(excel_buffer, index=False)
     st.download_button("📥 Download ke Excel (.XLSX)", data=excel_buffer, file_name="hasil_clustering.xlsx")
 
-    # 📄 Export PDF Ringkasan
+    # 📄 Export PDF
     def export_pdf(df):
         pdf = FPDF()
         pdf.add_page()
@@ -120,7 +109,7 @@ if uploaded_file:
         pdf.ln(10)
         pdf.multi_cell(0, 10, txt="Ringkasan Statistik per Klaster:")
 
-        cluster_summary = df.groupby('Cluster')[cols].mean().round(2)
+        cluster_summary = df.groupby("Cluster")[cols].mean().round(2)
 
         for cluster in cluster_summary.index:
             pdf.ln(5)
@@ -128,17 +117,14 @@ if uploaded_file:
             for col in cols:
                 pdf.cell(0, 10, f"{col}: {cluster_summary.loc[cluster, col]}", ln=True)
 
-        # Perbaikan: kembalikan bytearray sebagai bytes
-        return bytes(pdf.output(dest='S'))
-
-
+        return pdf.output(dest="S").encode("latin1")  # ✅ encode ke bytes dengan benar
 
     pdf_data = export_pdf(df)
     st.download_button("📄 Export Laporan PDF", data=pdf_data, file_name="laporan_wine_clustering.pdf")
 
     # 📌 Footer
     st.markdown("---")
-    st.caption("🍷 WineCluster Pro by Ricky Steven Silaban - T/A Data Mining 2025")
+    st.caption("🍷 WineCluster by Ricky Steven Silaban & Martinus Jawa - T/A Data Mining 2025")
+
 else:
     st.info("Silakan upload file CSV terlebih dahulu.")
-
