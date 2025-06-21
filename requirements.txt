@@ -8,14 +8,5 @@ plotly
 fpdf
 openpyxl
 protobuf==3.20.3
-=======
-streamlit
-scikit-learn
-pandas
-matplotlib
-seaborn
-plotly
-fpdf
-openpyxl
-protobuf==3.20.3
+
 
