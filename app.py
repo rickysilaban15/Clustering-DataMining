@@ -29,7 +29,7 @@ color: white;
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # 🎯 Title and Sidebar
-st.title("🍷 WineCluster Pro - Analisis Clustering Wine")
+st.title("🍷 WineCluster - Analisis Clustering Wine")
 st.sidebar.title("🍇 WineCluster Sidebar")
 
 # 📤 Upload File
